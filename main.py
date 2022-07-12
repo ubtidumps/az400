@@ -59,7 +59,6 @@ finalhtml += '''
                 $.ajax({
                     url: 'https://nandy-cors.herokuapp.com/https://www.examtopics.com/ajax/discussion/exam-question/' + question_id.toString(),
                     success: function (data) {
-                        console.log(data)
                         $('.discussion-body').html(data);
                         $('#discussion-modal').attr("data-discussion-question-id", question_id);
                         $('.discussion-real-title').text($('.discussion-body').find('.new-comment-box').data('title'));
