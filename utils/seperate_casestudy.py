@@ -1,12 +1,13 @@
 import re
 from bs4 import BeautifulSoup
 
-with open('index.html','r') as f:
+with open('index.html', encoding='utf8') as f:
     content = f.read()
 
-soup = BeautifulSoup(content,'html.parser')
+soup = BeautifulSoup(content, 'html.parser')
 
-case_study_questions = soup.find_all('div',attrs={'class':'exam-question-card'})
+case_study_questions = soup.find_all(
+    'div', attrs={'class': 'exam-question-card'})
 
 
 finalhtml = '''
@@ -16,7 +17,7 @@ finalhtml = '''
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ 104 Dumps</title>
+    <title>AZ 400 Dumps - Case Study</title>
         <!-- deflink == defered link (loaded later by jquery) -->
     <!-- bootstrap v4 css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -27,10 +28,10 @@ finalhtml = '''
 '''
 
 for ele in case_study_questions:
-    ptag  = ele.find_all('p',{'class':'card-text'})
+    ptag = ele.find_all('p', {'class': 'card-text'})
     for pele in ptag:
-        if pele.find(text = re.compile(r'To start the case study -')) is not None:
-            finalhtml+=ele.prettify()
+        if pele.find(text=re.compile(r'To start the case study -')) is not None:
+            finalhtml += ele.prettify()
 finalhtml += '''
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -139,5 +140,5 @@ finalhtml += '''
 '''
 
 
-with open('casestudies/index.html','w') as f1:
+with open('casestudy/index.html', 'w', encoding='utf8') as f1:
     f1.write(finalhtml)

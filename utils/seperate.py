@@ -1,4 +1,14 @@
+import re
 from bs4 import BeautifulSoup
+
+with open('index.html','r',encoding='utf8') as f:
+    content = f.read()
+
+soup = BeautifulSoup(content,'html.parser')
+
+case_study_questions = soup.find_all('div',attrs={'class':'exam-question-card'})
+
+
 finalhtml = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -6,30 +16,23 @@ finalhtml = '''
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZ 400 Dumps</title>
+    <title>AZ 400 Dumps - Yes or No</title>
         <!-- deflink == defered link (loaded later by jquery) -->
     <!-- bootstrap v4 css -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://www.examtopics.com/assets/css/style.css">
 </head>
 <body>
-    
 '''
-question_count = 1
-for i in range(1, 35):
-    with open(f'Templates/AZ-400 Exam – Free Actual Q&As, Page {i} _ ExamTopics.html', encoding='utf8') as f:
-        content = f.read()
-        soup = BeautifulSoup(content, features='html.parser')
-        for ele in soup.find_all('div', {'class': 'questions-container'}):
-            for header in ele.find_all('div',{'class':'exam-question-card'}):
-                header.div.next.string.replace_with(f'Question #{question_count}')
-                question_count+=1
-            for remove in ele.find_all('a', {'class': ['question-discussion-button']}):
-                remove['href'] = '#'
-            for img in ele.find_all('img', {'class': 'in-exam-image'}):
-                src = 'https://examtopics.com/assets/media/exam-media/04156/'+img['src'].split('/')[-1]
-                img['src'] = src
-            finalhtml += ele.prettify()+'<br/>'
+
+c=0
+for ele in case_study_questions:
+    ptag  = ele.find_all('li',{'class':'multi-choice-item'})
+    for pele in ptag:
+        text = pele.text.strip().replace('\n','').replace(' ','')
+        if 'A.Yes' in text:
+            c+=1
+            finalhtml+=ele.prettify()
 finalhtml += '''
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
@@ -59,6 +62,7 @@ finalhtml += '''
                 $.ajax({
                     url: 'https://nandy-cors.herokuapp.com/https://www.examtopics.com/ajax/discussion/exam-question/' + question_id.toString(),
                     success: function (data) {
+                        console.log(data)
                         $('.discussion-body').html(data);
                         $('#discussion-modal').attr("data-discussion-question-id", question_id);
                         $('.discussion-real-title').text($('.discussion-body').find('.new-comment-box').data('title'));
@@ -136,5 +140,6 @@ finalhtml += '''
 </html>
 '''
 
-with open('index.html', 'w', encoding='utf8') as f1:
+
+with open('yesorno/index.html','w', encoding='utf8') as f1:
     f1.write(finalhtml)
