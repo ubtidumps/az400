@@ -57,7 +57,7 @@ finalhtml += '''
             }
             function loadDiscussionIntoModal(question_id, open_voting_comment) {
                 $.ajax({
-                    url: 'https://nandy-cors.herokuapp.com/https://www.examtopics.com/ajax/discussion/exam-question/' + question_id.toString(),
+                    url: 'https://howling-crypt-47129.herokuapp.com/https://www.examtopics.com/ajax/discussion/exam-question/' + question_id.toString(),
                     success: function (data) {
                         $('.discussion-body').html(data);
                         $('#discussion-modal').attr("data-discussion-question-id", question_id);
