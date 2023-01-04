@@ -41838,7 +41838,8 @@
         $.ajax({
             url: 'https://www.examtopics.com/ajax/discussion/exam-question/' + question_id.toString(),
             headers: {
-                "Accept": "*/*"
+                "Accept": "*/*",
+                "X-Requested-With": "XMLHttpRequest"
             },
             success: function (data) {
                 $('.discussion-body').html(data);
